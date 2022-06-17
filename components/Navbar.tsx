@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import {
   MenuIcon,
   DeviceMobileIcon,
@@ -8,25 +8,10 @@ import {
   ClipboardListIcon,
   CashIcon,
   UserCircleIcon,
-  ArrowDownIcon,
-} from '@heroicons/react/outline'
-import logo from '../public/logo.svg'
-import rickroll from '../public/rickroll.png'
-import { useState } from 'react'
-
-interface NavData {
-  size?: number
-  icon: JSX.Element
-  chevron?: JSX.Element
-  title: string
-  isDropdown: boolean
-  isOpen: boolean
-}
-
-interface DropdownProps {
-  nav: NavData
-  handleOnClickDropdown: (title: string) => void
-}
+} from '@heroicons/react/outline';
+import logo from '../public/logo.svg';
+import { useState } from 'react';
+import Dropdown from './Dropdown';
 
 const navDetails = [
   {
@@ -78,53 +63,52 @@ const navDetails = [
     icon: <UserCircleIcon />,
     isOpen: false,
   },
-]
+];
 
-const Dropdown = ({ nav, handleOnClickDropdown }: DropdownProps) => {
-  const { icon, title, size, chevron, isDropdown, isOpen } = nav
-  return (
-    <div
-      onClick={() => handleOnClickDropdown(title)}
-      className='flex items-center gap-1 cursor-pointer relative'
-    >
-      <span className='w-4 h-4 text-blue'>{icon}</span>
-      <span className='text-sm'>{title}</span>
-      {isDropdown && <span className='w-3 h-2'>{chevron}</span>}
-      {isDropdown && (
-        <div
-          className={`absolute p-2 h-max w-max bg-white rounded-md shadow-sm right-0 top-10 origin-top scale-y-0 transition-all duration-200 
-${isOpen && 'scale-y-100'} `}
-        >
-          <div className='scale-100 relative'>
-            <div className='flex items-center '>
-              <ArrowDownIcon className='w-4 h-3' />
-              <p className='text-sm w-24'>Scan QR Code to download</p>
-            </div>
-            <Image
-              className='mx-auto mt-2'
-              src={rickroll}
-              width={100}
-              height={100}
-              alt='rickroll'
-            />
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
+const dropdownDetails = [
+  {
+    title: 'Transports',
+    isDropdown: true,
+    chevron: <ChevronDownIcon />,
+    isOpen: false,
+  },
+  {
+    title: 'Accommodations',
+    isDropdown: true,
+    chevron: <ChevronDownIcon />,
+    isOpen: false,
+  },
+  {
+    title: 'Things To do',
+    isDropdown: true,
+    chevron: <ChevronDownIcon />,
+    isOpen: false,
+  },
+  {
+    title: 'Bills & Top-ups',
+    isDropdown: true,
+    chevron: <ChevronDownIcon />,
+    isOpen: false,
+  },
+  {
+    title: 'Travel Add-ons',
+    isDropdown: true,
+    chevron: <ChevronDownIcon />,
+    isOpen: false,
+  },
+];
 
 const Navbar = () => {
-  const [navData, setNavData] = useState(navDetails)
+  const [navData, setNavData] = useState(navDetails);
 
   const handleOnClickDropdown = (title: string) => {
     setNavData((prev) =>
       prev.map((p) => ({
         ...p,
-        isOpen: title === p.title ? !p.isOpen : p.isOpen,
+        isOpen: title === p.title ? !p.isOpen : false,
       }))
-    )
-  }
+    );
+  };
 
   return (
     <nav className='h-[95px] bg-white fixed inset-0'>
@@ -147,9 +131,17 @@ const Navbar = () => {
           </button>
         </div>
       </div>
-      <div className='h-[40px] bg-gray'></div>
+      <div className='h-[40px] bg-gray flex px-36 font-medium gap-4'>
+        {dropdownDetails.map((dropdown) => (
+          <Dropdown
+            key={dropdown.title}
+            nav={dropdown}
+            handleOnClickDropdown={handleOnClickDropdown}
+          />
+        ))}
+      </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
